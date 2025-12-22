@@ -1,0 +1,40 @@
+---
+import Layout from "$layouts/Layout.astro";
+import { supabase } from "$utils/supabase.js";
+
+export async function getStaticPaths() {
+	const { data } = await supabase.from("_distilleries_mat").select("province_name_slug", { distinct: true }).eq('country_slug', 'ca');
+
+	const provinces = [...new Set(data?.map((d) => d.province_name_slug))];
+
+	return provinces?.map((province) => ({
+		params: { province_name_slug: province },
+		props: { province_name_slug: province }
+	}));
+};
+
+const { data: places } = await supabase
+	.from("_distilleries_mat")
+	.select("id, slug, name, city, province, province_name_slug, score")
+	.eq("province_name_slug", Astro.params.province_name_slug)
+	.order("score", { ascending: false, nullsFirst: false });
+
+const province = places?.[0]?.province || 'Unknown'
+
+---
+
+<Layout>
+	<nav class="Breadcrumbs">
+		<a href="/">BarrelGuide</a> 
+		{province} Distilleries
+	</nav>
+	<h1>Distilleries in {province}</h1>
+	<ul>
+		{places?.map((place) => (
+			<li>
+				<a href={`/${place.slug}/`}>{place.name}</a> {place.city}, {place.province} (🏅{place.score}) {place.id > 12022 ? `🎾` : ``}
+			</li>
+		))}
+	</ul>
+
+</Layout>

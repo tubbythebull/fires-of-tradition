@@ -1,0 +1,28 @@
+---
+const { reviews=[] } = Astro.props;
+
+const quote = reviews?.find(r => r.rating > 4) || false
+
+// if nothing to display, return nothing
+if (!quote || !quote.text) return
+
+---
+
+<blockquote>
+	<q>{quote.text}</q>
+</blockquote>
+<style is:global>
+	blockquote {
+		background: #333;
+		margin: 2em 0;
+		padding: 1.5em;
+		font-style: italic;
+		color: #fff;
+		border-radius: 8px;
+	}
+	blockquote q {
+		font-size: 1.3em;
+		line-height: 1.7;
+	}
+	
+</style>

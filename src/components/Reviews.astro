@@ -1,0 +1,33 @@
+---
+const { summary, highlights, plop } = Astro.props;
+
+// if nothing to display, return nothing
+if (!summary && !highlights?.length) return
+
+---
+
+<section class="Reviews">
+	<h2>Why we love this distillery</h2>
+
+	{ summary && <p>{summary}</p> }
+
+	{ highlights?.length && 
+		<ul>
+			{highlights?.map(highlight => (
+				<li>
+					{highlight}
+				</li>
+			))}
+		</ul>
+	}
+</section>
+
+<style is:global>
+	.Reviews {
+		background: rgb(148, 255, 168);
+		padding: 1.5em;
+		padding-top: .5em;
+		border-radius: 8px;
+		margin: 2em 0;
+	}
+</style>

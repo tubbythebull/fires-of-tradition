@@ -1,0 +1,32 @@
+POST http://localhost:4321/api/auth/phone/query
+Content-Type: application/json
+
+{
+	"phone": "1519 520-6107"
+}
+
+###
+POST http://localhost:4321/api/auth/phone/confirm
+Content-Type: application/json
+
+{
+	"phone": "1519 520-6107",
+	"pin": 922118
+}
+
+
+###
+GET http://localhost:4321/api/auth/phone/test
+Content-Type: application/json
+
+
+
+###
+POST http://localhost:4321/internal/queue
+Content-Type: application/json
+
+{
+	"cid": "some-cid",
+	"search": "some search query",
+	"type": "some type"
+}

@@ -1,0 +1,27 @@
+---
+import Layout from "$layouts/Layout.astro";
+import { supabase } from "$utils/supabase.js";
+import TopInProvince from "$islands/TopInProvince.astro";
+
+const { data: places } = await supabase
+	.from("_distilleries_mat")
+	.select("id, place, name, slug, city, province")
+	.order("score", { ascending: false, nullsFirst: false })
+	.limit(10);
+
+---
+<Layout>
+
+	<TopInProvince server:defer>
+		<h1>Top 10 Distilleries</h1>
+		<ul>
+			{places?.map((place) => (
+				<li>
+					<a href={`/${place.slug}`}>{place.name}</a> {place.city}, {place.province}
+				</li>
+			))}
+		</ul>
+	</TopInProvince>
+
+	
+</Layout>

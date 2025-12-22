@@ -1,0 +1,17 @@
+{
+  "name": "distilleries",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.9",
+    "better-sqlite3": "^12.5.0",
+    "astro": "^5.13.8",
+    "marked": "^16.3.0"
+  }
+}

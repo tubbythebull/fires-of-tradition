@@ -1,0 +1,10 @@
+---
+---
+<form action="/search" method="get">
+	<input type="text" name="q" aria-label="Search" size="8" placeholder="search&hellip;" spellcheck="false" autocomplete="off" value={Astro.url.searchParams.get('q') || ''} />
+	<button type="submit" aria-label="Search">🔍</button>
+</form>
+
+<style is:global>
+	
+</style>

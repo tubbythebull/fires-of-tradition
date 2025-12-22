@@ -1,0 +1,111 @@
+---
+const { summary, flags, merchant } = Astro.props
+
+function unCamelCase(input) {
+	return input.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().replaceAll('nfc', 'tap-to-pay')
+}
+
+function upperCaseFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function flagger(flags) {
+	const flagObj = []
+	
+	if (flags.includes('delivery')) {
+		flagObj.push({ icon: 'xxx', label: 'Delivery'})
+	}
+
+	if (flags.includes('allowsDogs')) {
+		flagObj.push({ icon: 'xxx', label: 'Dog-friendly'})
+	}
+
+	if (flags.includes('liveMusic')) {
+		flagObj.push({ icon: 'xxx', label: 'Live music'})
+	}
+
+	// goodFor
+	const goodFor = []
+	flags.filter(f => f.startsWith('goodFor')).map(f => {
+		goodFor.push(f.replace('goodFor', ''))
+	})
+	if (goodFor.length) flagObj.push({ icon: 'good_for', label: 'Good for ' + unCamelCase(goodFor.join(', '))})
+
+	// serves
+	const serves = []
+	flags.filter(f => f.startsWith('serves')).map(f => {
+		serves.push(f.replace('serves', ''))
+	})
+	if (serves.length) flagObj.push({ icon: 'serves', label: 'Serves ' + unCamelCase(serves.join(', '))})
+
+	// accepts
+	const accepts = []
+	flags.filter(f => f.startsWith('accepts')).map(f => {
+		accepts.push(f.replace('accepts', ''))
+	})
+	if (accepts.length) flagObj.push({ icon: 'payment', label: 'Accepts ' + unCamelCase(accepts.join(', '))})
+
+	// wheelchairAccessible
+	const wheelchairAccessible = []
+	flags.filter(f => f.startsWith('wheelchairAccessible')).map(f => {
+		wheelchairAccessible.push(f.replace('wheelchairAccessible', ''))
+	})
+	if (wheelchairAccessible.length) flagObj.push({ icon: 'accessibility', label: 'Accessible ' + unCamelCase(wheelchairAccessible.join(', '))})
+
+	// parking
+	const parking = []
+	flags.filter(f => f.includes('Parking') && !f.startsWith('wheelchair')).map(f => {
+		parking.push(f)
+	})
+	if (parking.length) flagObj.push({ icon: 'parking', label: unCamelCase(parking.join(', '))})
+	
+
+
+// 	[
+//    "Delivery",
+//    "dineIn",
+//    "goodForGroups",
+//    "liveMusic",
+//    "outdoorSeating",
+//    "reservable",
+//    "restroom",
+//    "servesBeer",
+//    "servesCoffee",
+//    "servesDessert",
+//    "servesDinner",
+//    "servesLunch",
+//    "servesWine",
+//    "takeout",
+//    "acceptsCreditCards",
+//    "acceptsDebitCards",
+//    "acceptsNfc",
+//    "wheelchairAccessibleParking",
+//    "freeParkingLot",
+//    "freeStreetParking"
+
+
+
+
+	return flagObj
+}
+
+
+---
+
+{flags.length || summary
+	? 	<hr />
+		<h2>Distillery Services &plus; Perks</h2>
+	: ''
+}
+
+{flagger(flags)?.length
+	?	<ul class="check">
+			{flagger(flags)?.map(f => <li>{upperCaseFirstLetter(f.label)}</li> )}
+		</ul>
+	: null
+}
+
+{flags.length > 2 && summary
+	? 	<p>{summary}</p>
+	: ''
+}

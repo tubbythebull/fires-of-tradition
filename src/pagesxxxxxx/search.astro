@@ -1,0 +1,92 @@
+---
+export const prerender = false
+// const cf = Astro.locals.runtime.cf
+
+
+import Layout from '$layouts/Layout.astro'
+import { supabase } from '$utils/supabase';
+import { geoCode } from '$utils/geo'
+import { ucWords } from '$utils/strings'
+// import { timer, timerEnd} from '$utils/perf';
+
+const search = Astro.url.searchParams.get('q')?.toLowerCase()?.trim()
+
+// import MerchantPreview from '$components/MerchantPreview.astro';
+// import EventTable from '$components/EventTable.astro';
+
+
+const { data: places, error: placesError } = await supabase
+	.rpc('_distilleries_search_name', {
+		_query: search
+	});
+
+
+
+
+const geo = await geoCode(search, Astro.request.headers.get('cf-ipcountry'))
+
+const geoQuery = {
+	_directory: 'distillery', 
+	_lat: Number(geo.lat), 
+	_lon: Number(geo.lon), 
+	_radius: Astro.url.searchParams.get('radius') || 50,
+	_limit: Astro.url.searchParams.get('limit') || 50,
+	_exclusions: places?.map(p => p.id) || []
+}
+
+
+let { data: geoPlaces, error: geoError } = geo
+	? await supabase
+		.rpc('_distilleries_nearby_faster', geoQuery)
+	: { data: null, error: null };
+
+
+const isSearchResult = places && places.length > 0
+const isGeoResult = geoPlaces && geoPlaces.length > 0
+
+---
+
+<Layout title={`Search for ${search}`}>
+
+	<!-- <pre>places {JSON.stringify(places, null, 3)}</pre> -->
+	<!-- <pre>postal {postal}</pre>
+	<pre>geo {JSON.stringify(geo, null, 3)}</pre> -->
+	<!-- <pre>places {JSON.stringify(places, null, 3)}</pre>
+	<pre>geoPlaces {JSON.stringify(geoPlaces, null, 3)}</pre>
+	<pre>geoError {JSON.stringify(geoError, null, 3)}</pre> -->
+
+
+	{isSearchResult && <>
+		<h1>Distillery search results for <mark>&ldquo;{search}&rdquo;</mark></h1>
+		<pre>{JSON.stringify(places, null, 3)}</pre>
+		{/* <section class="Grid">
+			{places?.map((place: any) => <MerchantPreview merchant={place} showFirstReview="true" />)}
+		</section> */}
+	</>}
+
+	{!isSearchResult && !isGeoResult && <>
+		<h1>No results for <mark>&ldquo;{search}&rdquo;</mark></h1>
+	</>}
+
+	{!isSearchResult && isGeoResult && <>
+		<h1>Distilleries near <mark>{geo?.postal ? geo.postal.toUpperCase() : ucWords(`${geo?.city}, ${geo?.province}`)}</mark></h1>
+	</>}
+
+	{isSearchResult && isGeoResult && 
+		<>
+			<h2>Distilleries near <mark>{geo?.postal ? geo.postal.toUpperCase() : ucWords(`${geo?.city}, ${geo?.province}`)}</mark></h2>
+		</>
+	}
+
+	<!-- {isGeoResult &&
+		<>
+			<section class="Grid Mini FadeIn">
+				{geoPlaces?.map((place: any) => <MerchantPreview merchant={place} />)}
+			</section>
+		</>
+	} -->
+
+	<pre>geoPlaces {JSON.stringify(geoPlaces, null, 3)}</pre>
+
+	
+</Layout>

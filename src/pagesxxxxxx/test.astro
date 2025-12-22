@@ -1,0 +1,16 @@
+---
+import Layout from "$layouts/Layout.astro";
+import Products from "$components/Products.astro";
+
+const products = {
+	"Whiskies": "Glenfiddich 12",
+	"Gins": ["Hendrick's", "Tanqueray", "Bombay Sapphire"],
+	"Rums": ["Mount Gay", "Havana Club", "Appleton Estate"]
+};
+
+---
+<Layout>
+
+	<Products products={products} />
+
+</Layout>

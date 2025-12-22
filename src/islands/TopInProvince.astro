@@ -1,0 +1,44 @@
+---
+export const prerender = false
+const cf = Astro.locals.runtime.cf
+
+import { supabase } from "$utils/supabase.js"
+
+const { data: places } = await supabase
+	.from("_distilleries_mat")
+	.select("id, slug, name, city, province, province_name_slug, score")
+	.eq("province_shortcode", cf.regionCode)
+	.order("score", { ascending: false, nullsFirst: false })
+	.limit(10);
+
+const province = cf.region
+
+// set header for caching at edge
+// Astro.response.headers.set("Cache-Control", "public, s-maxage=1800, stale-while-revalidate=86400")
+---
+
+	<h1>Top Distilleries in {province}</h1>
+	<ul>
+		{places?.map((place) => (
+			<li>
+				<a href={`/${place.slug}`}>{place.name}/</a> {place.city}, {place.province} (🏅{place.score})
+			</li>
+		))}
+	</ul>
+
+<pre>{JSON.stringify({
+	continent: cf.continent,
+	asn: cf.asn,
+	country: cf.country,
+	isEUCountry: cf.isEUCountry,
+	region: cf.region,
+	colo: cf.colo,
+	timezone: cf.timezone,
+	longitude: cf.longitude,
+	latitude: cf.latitude,
+	postalCode: cf.postalCode,
+	city: cf.city,
+	regionCode: cf.regionCode,
+	asOrganization: cf.asOrganization
+}, null, 3)}</pre>
+<pre>TopInProvince rendered at {new Date().toISOString()}</pre>

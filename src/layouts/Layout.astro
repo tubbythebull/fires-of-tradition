@@ -1,0 +1,81 @@
+---
+import { sql } from "$utils/sql.js"
+
+const { title, description } = Astro.props
+const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY position").all()
+
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>		
+		<meta name="description" content={description} />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> -->
+
+		<!-- Preload font CSS -->
+		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:wght@300;400;500;600;700;800&display=swap" />
+
+		<!-- Load stylesheet asynchronously -->
+		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+
+		<style is:global>
+			body {
+				background-color: #fff;
+				color: #000;
+				font: 15pt/1.4 "Fraunces", sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				min-width: 100dvh;
+				& > * {
+					padding: .5rem 1rem;
+				}
+			}
+			header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 2rem;
+				background-color: #555;
+				color: #fff;
+				& a {
+					color: inherit;
+				}
+				& ul {
+					list-style: none;
+					margin: 0;
+					padding: 0;
+					display: flex;
+					gap: 1rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<a href="/" id="logo">Fires of Tradition</a>
+			<nav>
+				<ul>
+					{categories.map((category:any) => (
+						<li><a href={`/${category.slug}`}>{category.name}</a></li>
+					))}
+					<li><a href="/fireplace-finishes">Finishes</a></li>
+					<li><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
+					<li><a href="/about">About Us</a></li>
+					<li><a href="/contact">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+		<slot />
+		<footer style="margin-top: 3rem; color: #999">
+			<pre>Layout rendered at {new Date().toISOString()}</pre>
+		</footer>
+	</body>
+</html>

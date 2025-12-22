@@ -1,0 +1,41 @@
+---
+import Layout from "$layouts/Layout.astro";
+import { sql } from "$utils/sql.js";
+import { markdownToHtml as markdown } from "$utils/helpers.js";
+
+export async function getStaticPaths() {
+	const categories = sql.prepare("SELECT * FROM categories").all();
+	console.log(categories)
+	return categories.map((category:any) => ({
+		params: { category: category.slug, id: category.id },
+		props: { category }, // optional
+	}));
+};
+
+
+
+const category = sql.prepare("SELECT * FROM categories WHERE slug = ?").get(Astro.params.category);
+const products = sql.prepare("SELECT * FROM products WHERE category = ?").all(category?.id);
+
+
+---
+
+<Layout title={category?.name || 'woo'} description={category?.description || 'woo'}>
+	<p>
+		<a href="/">Home</a> / 
+		{category?.name}
+	</p>
+	<h1>{category?.name}</h1>
+	<Fragment set:html={markdown(category?.content || '')} />
+	<p>Browse our products in the {category?.name} category:</p>
+	<section class="Grid">
+		{products?.map((product:any) => (
+			<a href={`/${category?.slug}/${product.slug}`}>
+				<article class="Card">
+					{product.image ? <img src={product.image} alt={product.name} loading="lazy" /> : null}
+					<h3>{product.name}</h3>
+				</article>
+			</a>
+		))}
+	</section>
+</Layout>

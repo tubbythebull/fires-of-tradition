@@ -1,0 +1,86 @@
+---
+import { repairProducts } from '$utils/helpers.js'
+
+const products = Astro.props.products || []
+const hasProducts = Array.isArray(products) && products.length
+
+// if nothing to display, return nothing
+if (!hasProducts) return
+
+const ldJsonSchema = {
+	// "@context": "https://schema.org",
+	// "@type": "LocalBusiness",
+	// "@id": Astro.request.url,
+	// "hasOfferCatalog": {
+	// 	"@type": "OfferCatalog",
+	// 	"name": "Distillery Products",
+	// 	"itemListElement": Object.entries(products).map(([categoryName, products]) => ({
+	// 		"@type": "OfferCatalog",
+	// 		"name": categoryName,
+	// 		"itemListElement": products.map(name => ({
+	// 			"@type": "Product",
+	// 			"name": name
+	// 		}))
+	// 	}))
+	// }
+}
+
+---
+
+<section class="Products">
+	{ products.map( category => (
+		<div>
+			<h2>{ category.category }</h2>
+			<ul>
+				{ category?.items.map( product => <li>
+					{product.name}
+					{product.description ? <small style="display:block; line-height: 1.2; color: #999">{product.description}</small>:''}
+					{product.sizes?.length ? <small style="display:block; line-height: 1.2; color: #999">Available in {product.sizes.join(', ')}</small>:''}
+				</li> ) }
+			</ul>
+		</div>
+	)) }
+</section>
+
+<script type="application/ld+json" set:html={ JSON.stringify(ldJsonSchema) }></script>
+
+<style is:global>
+
+	.Products {
+		background: #f5f5f5;
+		padding: 1.5em;
+		border-radius: 8px;
+		margin: 2em 0;
+
+		@media (min-width: 600px) {
+			column-count: 2;
+			column-gap: 2em;
+		}
+		@media (min-width: 850px) {
+			column-count: 3;
+		}
+		@media (min-width: 1200px) {
+			column-count: 4;
+		}
+
+		/* display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		column-gap: 2em;
+		row-gap: 1em;
+		grid-auto-flow: dense; */
+		
+		& div {
+			break-inside: avoid;
+			padding: 0 0 .5em 0;
+			& * {
+				break-inside: avoid;
+			}
+			& > * {
+				margin: 0;
+				list-style: none;
+				padding: .25em 0 0 0;
+			}
+		}
+	}
+
+</style>

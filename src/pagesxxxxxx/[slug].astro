@@ -1,0 +1,84 @@
+---
+import { getSecret } from 'astro:env/server'
+import { markdownToHtml } from '$utils/helpers.js'
+import { supabase } from "$utils/supabase.js"
+
+import Layout from "$layouts/Layout.astro"
+
+import Products from "$components/Products.astro"
+import ProductsEnhanced from "$components/ProductsEnhanced.astro"
+import Reviews from "$components/Reviews.astro"
+import Features from "$components/Features.astro"
+import Amenities from '$components/Amenities.astro'
+import Quote from '$components/Quote.astro'
+import PhotoGrid from '$components/PhotoGrid.astro'
+
+export async function getStaticPaths() {
+	const { data: places } = await supabase.from("_distilleries_mat").select("id, slug, name").eq('country_slug', 'ca');
+	return places?.map((place) => ({
+		params: { slug: place.slug, id: place.id },
+		props: { place }
+	}));
+};
+
+const { data: place, error: placeError } = await supabase
+	.from("_distilleries_mat")
+	.select("*")
+	.eq("slug", Astro.params.slug)
+	.order('score', { ascending: false }) // in case of slug duplicates, get the latest by id
+	.limit(1)
+	.single();
+
+const { data: images, error: imagesError } = await supabase
+	.from("directories_images")
+	.select("google_places_photos")
+	.eq("directory_id", place?.id)
+	.limit(1)
+	.single();
+
+console.log(images, imagesError)
+
+if (placeError) {
+	console.error(placeError);
+	Astro.response.status = 404;
+}
+
+---
+
+<Layout title={place.name} description={place.shortdesc}>
+	
+	<nav class="Breadcrumbs">
+		<a href="/">BarrelGuide</a> 
+		<a href={`/distilleries-in-${place.province_name_slug}/`}>{place.province} Distilleries</a> 
+		{place.name}
+	</nav>
+
+	<PhotoGrid images={place.images} />
+
+	<PhotoGrid images={images?.google_places_photos} />
+
+	<h1>{place.name}</h1>
+	<address>{place.city}, {place.province}</address>
+	{place.overview ? <h2>{place.overview}</h2> : ''}
+	{place.marketing ? <p set:html={markdownToHtml(place.marketing)}></p> : ''}
+
+	
+	<Reviews summary={place.review_summary} highlights={place.review_highlights} />
+	
+	<!-- <Products products={place.products_enhanced || place.products} /> -->
+	<ProductsEnhanced products={place.products_enhanced} />
+
+	<Quote reviews={place.reviews_json||[]} />
+	
+	<Amenities summary={place.amenities_summary} flags={place.flags} />
+
+	<address>{place.formatted_address}</address>
+	<address>{place.phone}</address>
+	<address><a href={place.website} target="_blank">{place.website}</a></address>
+	{getSecret('MODE') != 'dev' ? '' : <a href={`/api/admin/queue?cid=${place.place}&extend_only=true`}>queue for extend only</a>}
+
+	<hr />
+
+
+	<pre>{JSON.stringify(place, null, 2)}</pre>
+</Layout>

@@ -1,0 +1,22 @@
+---
+const { images } = Astro.props
+import { imageFix } from '$utils/helpers.js'
+
+// if nothing to display, return nothing
+if (!images?.length) return
+
+---
+
+<figure class="PhotoGrid">
+	{images.map(i => <img src={imageFix(i, 335)} width="200" height="200" loading="eager" fetchpriority="high" />)}
+	<!-- <img src={imageFix(images?.[0], 700)} width="700" height="700" loading="eager" fetchpriority="high" />
+	<img src={imageFix(images?.[1], 335)} width="200" height="200" loading="eager" fetchpriority="high" />
+	<img src={imageFix(images?.[2], 335)} width="200" height="200" loading="eager" fetchpriority="high" /> -->
+</figure>
+
+<style is:global>
+	.PhotoGrid {
+		padding: 0;
+		margin: 0;
+	}
+</style>
