@@ -1,36 +1,48 @@
 ---
 import Layout from "$layouts/Layout.astro";
-import { sql } from "$utils/sql.js";
-import { markdownToHtml as markdown } from "$utils/helpers.js";
+
+
 
 export async function getStaticPaths() {
-	const categories = sql.prepare("SELECT * FROM categories").all();
-	console.log(categories)
-	return categories.map((category:any) => ({
-		params: { category: category.slug, id: category.id },
-		props: { category }, // optional
-	}));
-};
+	const categories = await Astro.glob('$data/categories/*.md')
+
+	// const Posts = (await import.meta.glob('$data/products/*.md'))
+	return categories?.map((category) => ({
+		// params: { slug: post.file.pathname.split('/').pop().split('.').shift() },
+		// params: { product: post.file.split('/').pop().split('.').shift() },
+		params: { category: category.frontmatter.slug },
+		props: { category: category },
+	}))
+}
+
+const { Content, frontmatter} = Astro.props.category;
 
 
 
-const category = sql.prepare("SELECT * FROM categories WHERE slug = ?").get(Astro.params.category);
-const products = sql.prepare("SELECT * FROM products WHERE category = ?").all(category?.id);
+// const category = sql.prepare("SELECT * FROM categories WHERE slug = ?").get(Astro.params.category);
+// const products = sql.prepare("SELECT * FROM products WHERE category = ?").all(category?.id);
 
+const products = await getProducts()
+async function getProducts() {
+	let products = await Astro.glob('$data/products/*.md')
+	return products?.map((p) => p.frontmatter)?.filter(p => p.category_slug == Astro.params.category)?.sort((a, b) => a.position - b.position)
+}
 
 ---
 
-<Layout title={category?.name || 'woo'} description={category?.description || 'woo'}>
+<Layout title={frontmatter?.name || 'woo'}>
 	<p>
 		<a href="/">Home</a> / 
-		{category?.name}
+		{frontmatter?.name}
 	</p>
-	<h1>{category?.name}</h1>
-	<Fragment set:html={markdown(category?.content || '')} />
-	<p>Browse our products in the {category?.name} category:</p>
-	<section class="Grid">
+	<section class="MaxWidthSmall">
+		<h1>{frontmatter?.name}</h1>
+		<Content />
+	</section>
+	<!-- <p>Browse our products in the {frontmatter?.name} category:</p> -->
+	<section class="Grid MaxWidthLarge">
 		{products?.map((product:any) => (
-			<a href={`/${category?.slug}/${product.slug}`}>
+			<a href={`/${frontmatter?.slug}/${product.slug}`}>
 				<article class="Card">
 					{product.image ? <img src={product.image} alt={product.name} loading="lazy" /> : null}
 					<h3>{product.name}</h3>

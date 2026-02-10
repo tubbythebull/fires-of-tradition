@@ -1,8 +1,15 @@
 ---
-import { sql } from "$utils/sql.js"
+// import { sql } from "$utils/sql.js"
 
 const { title, description } = Astro.props
-const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY position").all()
+// const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY position").all()
+
+
+const categories = await getCategories()
+async function getCategories() {
+	let cats = await Astro.glob('$data/categories/*.md')
+	return cats?.map((c) => c.frontmatter)?.sort((a, b) => a.position - b.position)
+}
 
 ---
 <!doctype html>
@@ -14,6 +21,8 @@ const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY p
 		<title>{title}</title>		
 		<meta name="description" content={description} />
 		
+		<link href="/style.css" rel="stylesheet" />
+
 		<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
 		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> -->
 
@@ -24,7 +33,7 @@ const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY p
 		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
 
-		<style is:global>
+		<!-- <style is:global>
 			body {
 				background-color: #fff;
 				color: #000;
@@ -56,26 +65,42 @@ const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY p
 					gap: 1rem;
 				}
 			}
-		</style>
+		</style> -->
 	</head>
 	<body>
-		<header>
+		<header id="SiteHeader">
 			<a href="/" id="logo">Fires of Tradition</a>
 			<nav>
 				<ul>
-					{categories.map((category:any) => (
-						<li><a href={`/${category.slug}`}>{category.name}</a></li>
+					{categories?.map((category:any) => (
+						<li class="secondary emphasis"><a href={`/${category.slug}`}>{category.name}</a></li>
 					))}
-					<li><a href="/fireplace-finishes">Finishes</a></li>
-					<li><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
-					<li><a href="/about">About Us</a></li>
-					<li><a href="/contact">Contact</a></li>
+					<li class="tertiary"><a href="/fireplace-finishes">Finishes</a></li>
+					<li class="tertiary"><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
+					<li class="tertiary"><a href="/about">About Us</a></li>
+					<li class="tertiary"><a href="/faq">FAQ</a></li>
+					<li class="primary"><a href="/contact">Contact</a></li>
 				</ul>
 			</nav>
+			<button class="mobile tablet" popovertarget="nav">menu</button>
 		</header>
 		<slot />
-		<footer style="margin-top: 3rem; color: #999">
-			<pre>Layout rendered at {new Date().toISOString()}</pre>
+
+		<nav id="nav" popover>
+			<button popovertarget="nav" popovertargetaction="hide">close</button>
+			<ul>
+				{categories?.map((category:any) => (
+					<li><a href={`/${category.slug}`}>{category.name}</a></li>
+				))}
+				<li><a href="/fireplace-finishes">Finishes</a></li>
+				<li><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
+				<li><a href="/about">About Us</a></li>
+				<li><a href="/faq">FAQ</a></li>
+				<li><a href="/contact">Contact</a></li>
+			</ul>
+		</nav>
+		<footer>
+			Footer goes here... <em>Layout rendered at {new Date().toISOString()}</em>
 		</footer>
 	</body>
 </html>

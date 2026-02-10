@@ -9,31 +9,39 @@ const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY p
 
 <Layout title="Home" description="Welcome to the homepage">
 
-	<h1>Timeless Elegance Meets Modern Convenience</h1>
-	<p>Discover the perfect marriage of heritage craftsmanship and cutting-edge technology with our collection of traditional cast iron fireplaces featuring state-of-the-art electric fire units.</p>
+	<section class="MaxWidthMedium">
 
-	<p>Explore our collection and discover how tradition and innovation create spaces that feel both authentic and effortlessly comfortable.</p>
+		<h1>Timeless Elegance Meets Modern Convenience</h1>
+		<p>Discover the perfect marriage of heritage craftsmanship and cutting-edge technology with our collection of traditional cast iron fireplaces featuring state-of-the-art electric fire units.</p>
 
-	<ul>
-		{categories.map((category:any) => (
-			<li><a href={`/${category.slug}`}>{category.name}</a></li>
-		))}
-	</ul>
+		<p>Explore our collection and discover how tradition and innovation create spaces that feel both authentic and effortlessly comfortable.</p>
 
-	<h2>Cast Iron with Electric Fire: The Best of Both Worlds</h2>
-	<p>For generations, cast iron fireplaces have been the beating heart of distinguished homes—symbols of enduring quality, architectural grace, and uncompromising craftsmanship. Today, we've elevated this timeless tradition with the seamless integration of advanced electric fire technology, creating fireplaces that honor the past while embracing the future.</p>
-	<a href="/cast-iron-fireplace-with-electric-fire">Why Choose Cast Iron with Electric Fire?</a>
+		<ul>
+			{categories.map((category:any) => (
+				<li><a href={`/${category.slug}`}>{category.name}</a></li>
+			))}
+		</ul>
 
-	<hr>
+	</section>
 
-	<h2>Exclusive Custom Finishes</h2>
-	<p>Every fireplace deserves a finish that complements your unique vision. That's why we offer two signature finishes, each meticulously applied by hand to enhance the natural beauty and texture of cast iron.</p>
-	<a href="/fireplace-finishes">Discover our custom fireplace finishes</a>
+	<section class="MaxWidthMedium">
 
-	<hr>
+		<h2>Cast Iron with Electric Fire: The Best of Both Worlds</h2>
+		<p>For generations, cast iron fireplaces have been the beating heart of distinguished homes—symbols of enduring quality, architectural grace, and uncompromising craftsmanship. Today, we've elevated this timeless tradition with the seamless integration of advanced electric fire technology, creating fireplaces that honor the past while embracing the future.</p>
+		<a href="/cast-iron-fireplace-with-electric-fire">Why Choose Cast Iron with Electric Fire?</a>
 
-	<h2>About Fires of Tradition</h2>
-	<p>For over two decades, Fires of Tradition has been Brantford's premier destination for discerning homeowners seeking the perfect balance of heritage authenticity and modern convenience. Located in the heart of Ontario's historic telephone city, our showroom showcases a carefully curated collection of traditional cast iron fireplaces paired with the latest electric fire technology.</p>
-	<a href="/about">Learn more about us</a>
+		<hr>
+
+		<h2>Exclusive Custom Finishes</h2>
+		<p>Every fireplace deserves a finish that complements your unique vision. That's why we offer two signature finishes, each meticulously applied by hand to enhance the natural beauty and texture of cast iron.</p>
+		<a href="/fireplace-finishes">Discover our custom fireplace finishes</a>
+
+		<hr>
+
+		<h2>About Fires of Tradition</h2>
+		<p>For over two decades, Fires of Tradition has been Brantford's premier destination for discerning homeowners seeking the perfect balance of heritage authenticity and modern convenience. Located in the heart of Ontario's historic telephone city, our showroom showcases a carefully curated collection of traditional cast iron fireplaces paired with the latest electric fire technology.</p>
+		<a href="/about">Learn more about us</a>
+
+	</section>
 
 </Layout>
