@@ -1,10 +1,5 @@
 ---
 import Layout from "$layouts/Layout.astro";
-import { getSecret } from "astro:env/server"
-import { sql } from "$utils/sql.js"
-
-const categories = sql.prepare("SELECT id, name, slug FROM categories ORDER BY position").all()
-
 ---
 
 <Layout title="Home" description="Welcome to the homepage">
