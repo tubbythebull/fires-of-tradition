@@ -68,7 +68,7 @@ async function getCategories() {
 		</style> -->
 	</head>
 	<body>
-		<header id="SiteHeader">
+		<header id="SiteHeader" class="MaxWidthExtraLarge">
 			<a href="/" id="logo">Fires of Tradition</a>
 			<nav>
 				<ul>
@@ -92,6 +92,16 @@ async function getCategories() {
 				{categories?.map((category:any) => (
 					<li><a href={`/${category.slug}`}>{category.name}</a></li>
 				))}
+				<!-- <li><a href="/fireplace-finishes">Finishes</a></li>
+				<li><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
+				<li><a href="/about">About Us</a></li>
+				<li><a href="/faq">FAQ</a></li>
+				<li><a href="/contact">Contact</a></li> -->
+			</ul>
+			<ul>
+				<!-- {categories?.map((category:any) => (
+					<li><a href={`/${category.slug}`}>{category.name}</a></li>
+				))} -->
 				<li><a href="/fireplace-finishes">Finishes</a></li>
 				<li><a href="/cast-iron-fireplace-with-electric-fire">Why Cast Iron Fireplaces?</a></li>
 				<li><a href="/about">About Us</a></li>

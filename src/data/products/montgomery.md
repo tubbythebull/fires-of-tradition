@@ -20,7 +20,7 @@ dimensions: {
 
 The Montgomery cast iron fireplace insert represents Victorian engineering ingenuity and artistic design united in a distinctive elliptical arch configuration. Unlike the symmetrical arches common to 19th-century fireplace design, the Montgomery features an elegantly detailed elliptical arch profile that creates enhanced width and visual intrigue. This thoughtful design incorporates angled cheeks—flared returns mounted on either side of the opening—that draw the eye back into the firebox while optimizing heat radiation into the room. Originally designed for coal burning yet equally effective with wood, this complete insert solution includes cast iron frame, fireback, and grate, embodying the Victorian era's mastery of combining functional efficiency with refined architectural aesthetics to create the visual and social centerpiece of distinguished homes.
 
-## Defining Characteristics
+<!-- ## Defining Characteristics -->
 
 ### Distinctive Elliptical Arch Profile
 

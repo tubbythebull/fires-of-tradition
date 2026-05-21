@@ -10,20 +10,200 @@ async function getCategories() {
 
 <Layout title="Home" description="Welcome to the homepage">
 
-	<section class="MaxWidthMedium">
+	<section class="VideoHero">
+		<video id="hero-video" src="/homepage.mp4" autoplay
 
-		<h1>Timeless Elegance Meets Modern Convenience</h1>
-		<p>Discover the perfect marriage of heritage craftsmanship and cutting-edge technology with our collection of traditional cast iron fireplaces featuring state-of-the-art electric fire units.</p>
+  muted
 
-		<p>Explore our collection and discover how tradition and innovation create spaces that feel both authentic and effortlessly comfortable.</p>
+  loop
 
-		<ul>
+  playsinline
+
+  webkit-playsinline
+
+  preload="auto"></video>
+	</section>
+
+	<script>
+		const video = document.getElementById('hero-video');
+		async function forcePlay() {
+
+  try {
+
+    await video.play();
+
+    // success: stop listening
+
+    removeListeners();
+
+  } catch (e) {
+
+    // still blocked
+
+  }
+
+}
+
+function removeListeners() {
+
+  events.forEach(event =>
+
+    document.removeEventListener(event, forcePlay)
+
+  );
+
+}
+
+const events = [
+'load',
+  'touchstart',
+
+  'touchend',
+
+  'mousedown',
+
+  'mouseup',
+
+  'click',
+
+  'scroll',
+
+  'keydown',
+
+  'visibilitychange'
+
+];
+
+// initial attempt
+
+forcePlay();
+
+// retry after ANY interaction
+
+events.forEach(event =>
+
+  document.addEventListener(event, forcePlay, { passive: true })
+
+);
+
+	</script>
+
+	<style>
+		.VideoHero {
+			position: relative;
+			width: 100%;
+			aspect-ratio: 21/9;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			& video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+	</style>
+
+
+	<section class="MaxWidthLarge Hero">
+		<img src="/test.jpeg" alt="A traditional cast iron fireplace with an electric fire unit, showcasing the perfect blend of classic design and modern technology." class="HeroImage" />
+		<header>
+			<h1>Timeless Elegance Meets Modern Convenience</h1>
+			<p>Discover the perfect marriage of heritage craftsmanship and cutting-edge technology with our collection of traditional cast iron fireplaces featuring state-of-the-art electric fire units.</p>
+		</header>
+	</section>
+	<style>
+		.Center {
+			text-align: center;
+		}
+		.Hero {
+			max-width: 100%;
+			& img.HeroImage {
+				width: 100%;
+				aspect-ratio: 1.5/1;
+				object-fit: cover;
+				border-radius: 8px;
+				background-color: orange;
+			}
+			& header {
+				padding: 0;
+				margin: 0;
+				max-width: 60ch;
+				& h1 {
+					margin: 0;
+					padding-block: .25em .05em;
+					text-wrap: balance;
+				}
+				& p {
+					font-size: 1.25rem;
+					margin: 0;
+					padding-block: .5em 1.5em;
+					text-wrap: balance;
+				}
+			}
+			@media (min-width: 800px) {
+				display: grid;
+				grid-template-columns: 1fr;
+				grid-template-rows: 1fr;
+				overflow: hidden;
+				& img.HeroImage {
+					grid-area: 1 / 1;
+					width: 100%;
+					aspect-ratio: 1.75/1;
+					border-radius: 8px;
+					background-color: orange;
+				}
+				& header {
+					grid-area: 1 / 1;
+					align-self: end;
+					/* display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					text-align: center; */
+					/* padding: 2em; */
+					/* backdrop-filter: blur(4px); */
+					padding: 0 2rem;
+			}
+		}
+
+
+
+		
+	</style>
+	
+
+	<section class="MaxWidthLarge" style="background-color: #ccc7bc; padding-block: min(2rem, 5vh); margin-block: 1rem;">
+
+		<!-- <h1>Timeless Elegance Meets Modern Convenience</h1>
+		<p>Discover the perfect marriage of heritage craftsmanship and cutting-edge technology with our collection of traditional cast iron fireplaces featuring state-of-the-art electric fire units.</p> -->
+
+		<!-- <p>Explore our collection and discover how tradition and innovation create spaces that feel both authentic and effortlessly comfortable.</p> -->
+
+		<h2 class="Center">Explore our collection</h2>
+		<ul class="GridList">
 			{categories.map((category:any) => (
-				<li><a href={`/${category.slug}`}>{category.name}</a></li>
+				<li>
+					<a href={`/${category.slug}`}>
+						<img src="/test.jpeg" alt={category.name} />
+						{category.name}
+					</a>
+				</li>
 			))}
 		</ul>
 
 	</section>
+
+	<style>
+		.GridList {
+			& a {
+				font-weight: 450;
+				text-transform: uppercase;
+				letter-spacing: .1em;
+			}
+		}
+	</style>
 
 	<section class="MaxWidthMedium">
 

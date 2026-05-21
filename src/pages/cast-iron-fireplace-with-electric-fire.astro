@@ -4,9 +4,44 @@ import Layout from "$layouts/Layout.astro";
 
 <Layout title="Home" description="Welcome to the homepage">
 
-	<h1>The Best of Both Worlds</h1>
+	<section class="MaxWidthLarge">
+		<figure class="FeatureSet">
+			<img src="#" alt="" width="400" height="350" />
+			<figcaption>
+				<h1>The Best of Both Worlds</h1>
 	<p>For generations, cast iron fireplaces have been the beating heart of distinguished homes—symbols of enduring quality, architectural grace, and uncompromising craftsmanship. Today, we've elevated this timeless tradition with the seamless integration of advanced electric fire technology, creating fireplaces that honor the past while embracing the future.</p>
+			</figcaption>
+		</figure>
+		<figure class="FeatureSet">
+			<img src="#" alt="" width="400" height="350" />
+			<figcaption>
+				<h2>Why Choose Cast Iron with Electric Fire?</h2>
+				<button popovertarget="why-cast-iron">Authentic Victorian & Georgian Styling</button>
+				<button popovertarget="why-cast-iron">Zero-Compromise Convenience</button>
+				<button popovertarget="why-cast-iron">Energy-Efficient Heating</button>
+				<button popovertarget="why-cast-iron">Genuine Cast Iron Construction</button>
+			</figcaption>
+		</figure>
+		<figure class="FeatureSet">
+			<img src="#" alt="" width="400" height="350" />
+			<figcaption>
+				<h2>Perfect for Modern Living Spaces</h2>
+				<p>Whether you're restoring a period property or adding character to a contemporary home, our electric cast iron fireplaces offer unparalleled versatility. Install in apartments, bedrooms, studies, or any room where traditional fireplace installation would be impractical or impossible.</p>
+			</figcaption>
+		</figure>
+		<figure class="FeatureSet">
+			<img src="#" alt="" width="400" height="350" />
+			<figcaption>
+				<h2>Curated Collections for Discerning Homeowners</h2>
+				<p>From compact bedroom inserts to grand statement mantels, our collection spans Georgian elegance, Victorian splendor, and Edwardian refinement. Each piece has been carefully selected to meet the exacting standards of those who appreciate quality, authenticity, and thoughtful design.</p>
+			</figcaption>
+		</figure>
+	</section>
 
+<aside popover id="why-cast-iron">
+	<header>
+		<button popovertarget="why-cast-iron" popovertargetaction="hide">close</button>
+	</header>
 	<h2>Why Choose Cast Iron with Electric Fire?</h2>
 	<h3>Authentic Victorian & Georgian Styling</h3>
 	<p>Each piece showcases the intricate detailing and robust construction that made cast iron the material of choice for period fireplaces. From ornate floral motifs to clean architectural lines, our traditional designs capture the authentic character of heritage homes.</p>
@@ -16,9 +51,6 @@ import Layout from "$layouts/Layout.astro";
 	<p>Modern electric fire units deliver targeted, controllable warmth with impressive efficiency. Heat the room you're in without warming the entire house, reducing energy waste while maintaining that essential fireside comfort.</p>
 	<h3>Genuine Cast Iron Construction</h3>
 	<p>We never compromise on materials. Every fireplace features authentic cast iron components—not reproductions—ensuring proper heat retention, longevity, and that unmistakable substantial presence that only real cast iron provides.</p>
-	<h2>Perfect for Modern Living Spaces</h2>
-	<p>Whether you're restoring a period property or adding character to a contemporary home, our electric cast iron fireplaces offer unparalleled versatility. Install in apartments, bedrooms, studies, or any room where traditional fireplace installation would be impractical or impossible.</p>
-	<h2>Curated Collections for Discerning Homeowners</h2>
-	<p>From compact bedroom inserts to grand statement mantels, our collection spans Georgian elegance, Victorian splendor, and Edwardian refinement. Each piece has been carefully selected to meet the exacting standards of those who appreciate quality, authenticity, and thoughtful design.</p>
+</aside>
 
 </Layout>

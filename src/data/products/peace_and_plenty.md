@@ -15,7 +15,7 @@ dimensions: {
 }
 ---
 
-# Peace and Plenty Cast Iron Mantel
+# Peace & Plenty Cast Iron Mantel
 ## Coalbrookdale's Masterwork of Allegorical Artistry
 
 The Peace and Plenty cast iron mantel represents the absolute pinnacle of Victorian fireplace design from Coalbrookdale, England's most distinguished foundry and the acknowledged leader in cast iron mantel production throughout the 19th century. This extraordinary design features two gracefully draped female figures embodying timeless virtues: Peace, extending an exquisitely detailed olive branch while gently holding a dove, and Plenty, bearing a wine jug and overflowing cornucopia—the ancient symbol of abundance and nourishment. This classic and enduring composition transcends mere decoration to achieve genuine sculptural artistry, transforming any interior into a gallery of Victorian craftsmanship at its most refined and culturally significant.

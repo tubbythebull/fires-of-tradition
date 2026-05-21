@@ -1,8 +1,10 @@
 :root {
+	--highlight: #e93a11;
 	--gutter: 2rem;
 	--width-small: 800px;
 	--width-medium: 1000px;
 	--width-large: 1300px;
+	--width-extra-large: 1600px;
 	@media (max-width: 800px) {
 		--gutter: 1rem;
 	}
@@ -15,7 +17,7 @@
 body {
 	margin: 0;
 	font-family: 'Outfit', monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	font-size: 17px;
+	font-size: 18px;
 	font-weight: 300;
 	line-height: 1.6;
 	color: #111;
@@ -29,18 +31,20 @@ body {
 			text-decoration: underline;
 		}
 	}
-	& h1, h2, h3, h4, h5, h6 {
+	& h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 		font-family: 'Fraunces', monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-		font-weight: 600;
+		font-weight: 400;
 		line-height: 1.2;
 		margin-top: 1.5em;
 		margin-bottom: 0.5em;
-		color: #333;
+		color: #111;
+		text-wrap: balance;
+		letter-spacing: -.03em;
 	}
-	& h1 { font-size: 2em; }
-	& h2 { font-size: 1.5em; }
-	& h3 { font-size: 1.25em; }
-	& h4 { font-size: 1.15em; }
+	& h1, .h1 { font-size: 2.5em; }
+	& h2, .h2 { font-size: 1.75em; }
+	& h3, .h3 { font-size: 1.2em; font-family: inherit; font-weight: 550; }
+	& h4, .h4 { font-size: 1.25em; }
 	
 	& > * {
 		padding-inline: var(--gutter);
@@ -224,10 +228,10 @@ body:has([popover]:popover-open) {
 				align-items: center;
 				justify-content: space-between;
 				padding-block: 1em;
-				background: #fff;
-				border-bottom: 1px solid #0002;
-				position: sticky;
-				top: 0;
+				background: #f6f5f3;
+				/* border-bottom: 1px solid #0002; */
+				/* position: sticky; */
+				/* top: 0; */
 				z-index: 1000;
 				font-weight: 500;
 				gap: 1.5em;
@@ -257,7 +261,7 @@ body:has([popover]:popover-open) {
 								transition: background-color .25s ease;
 							}
 							&:hover:after, &:focus:after {
-								background: #0008;
+								background: var(--highlight);
 							}
 						}
 						/* @media (max-width: 800px) {
@@ -401,205 +405,84 @@ body:has([popover]:popover-open) {
 
 
 
+	[popover] {
+		position: fixed;
+		margin: 0;
+	
+		padding: 2rem;
+		border: none;
+		border-radius: 0;
+		background: white;
+		overflow-y: auto;
+		opacity: 0;
+		height: auto;
+		box-sizing: border-box;
 
-			/* #nav {
-				position: -webkit-fixed;
-				position: fixed;
-				top: 0;
-				left: unset;
-				bottom: unset;
-				right: 0;
-			}
-			#nav:popover-open {
-				display: flex;
-				top: 0;
-				left: unset;
-				right: 0;
-				width: min(100%, 400px);
-				height: 100dvh;
-				overflow-y: auto;
-				margin: 0;
-				padding: 4em 2em 2em !important;
-				border: 0;
-				animation: nav-popover .25s ease .05s backwards;
-				&::backdrop {
-					display: block;
-					background: #5559;
-					backdrop-filter: saturate(0%);
-					animation: fadeIn 0.4s ease;
-					pointer-events: visible;
-					cursor: pointer;
-				}
-			}
-			@keyframes nav-popover {
-				from {
-					opacity: 0;
-					transform: translateX(100%);
-				}
-				to {
-					opacity: 1;
-					transform: translateX(0);
-				}
-			}
-			@keyframes fadeIn {
-				from {
-					opacity: 0;
-				}
-				to {
-					opacity: 1;
-				}
-			}
-			#nav {
-				flex-direction: column;
-				gap: 1em;
-				padding: 1em;
-				background: #fff;
-				color: #000;
-				font-size: 1.2rem;
-			}
-			#nav a {
-				color: inherit;
-				text-decoration: none;
-				font-weight: 500;
-			}
-			#nav a:hover {
-				text-decoration: underline;
-			}
-			#nav a:focus {
-				outline: 2px solid #000;
-				outline-offset: 2px;
-			} */
-
-
-		
-
-
-
-
-
-		*[popover] {
-			border: none;
-			padding: 1em var(--gutter);
-			background: #fff;
-			width: min(100%, 49ch);
-			box-sizing: border-box;
-			height: 100dvh;
-			overflow-y: scroll;
-			margin: 0 !important;
-
-			
-
-			/* position: -webkit-fixed; */
-			position: fixed;
-			top: 0;
-			left: unset;
-			/* bottom: unset; */
-			right: 0;
-
-			transform: translate3d(0, 0, 0);
-
-
-
-			/* box-shadow: 0 0 .5rem #0001; */
-
-			
-			
-			&::backdrop {
-				transform: translate3d(0, 0, 0);
-				display: block;
-				background: #8889;
-				backdrop-filter: saturate(0%);
-				animation: fadeIn 0.4s ease-out;
-				/* animation: fadeIn .5s cubic-bezier(0.19,1.00,0.22,1.00); */
-				pointer-events: none; 
-				cursor: pointer;
-			}
-			/* &::before {
-				content: " ";
-				background: linear-gradient(#fff, transparent);
-				position: fixed;
-				height: 4rem;
-				translate: -1rem -1rem;
-				width: 100%;
-			} */
-			& button[popovertarget] {
-				position: fixed;
-				right: var(--gutter);
-
-			}
-			&:popover-open {
-				/* animation: popover .15s ease-in-out .075s backwards; */
-				animation: popover .4s cubic-bezier(0.19,1.00,0.22,1.00) .075s backwards;
-				/* transition: transform 0.5s ; */
-			}
-
-
-
-
-
-			
-
-
-
-			
+		@media (max-width: 699px) {
+			transform: translateY(100%);
+			width: calc(100dvw - 1rem);
+			height: min-content;
+			max-height: 95dvh;
+			margin: auto auto 0 auto;
+			border-top-right-radius: 1em;
+			border-top-left-radius: 1em;
 		}
-		@keyframes popover {
-			from {
-				opacity: 0;
+		@media (min-width: 700px) {
+			transform: translateX(100%);
+			width: min(100%, 500px);
+			height: 100dvh;
+			margin: 0 0 0 auto;
+		}
+
+		transition:
+			opacity 0.2s ease-in-out,
+			transform 0.2s ease-in-out,
+			display 0.5s allow-discrete,
+			overlay 0.5s allow-discrete;
+	}
+
+	:popover-open {
+		opacity: 1;
+		/* transform: translateX(0); */
+
+		@media (max-width: 699px) {
+			transform: translateY(0);
+		}
+		@media (min-width: 700px) {
+			transform: translateX(0);
+		}
+
+		@starting-style {
+			opacity: 0;
+			/* transform: translateX(100%); */
+			@media (max-width: 699px) {
+				transform: translateY(100%);
+			}
+			@media (min-width: 700px) {
 				transform: translateX(100%);
 			}
-			to {
-				opacity: 1;
-				transform: translateX(0);
-			}
 		}
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
+		
+	}
+
+	[popover]::backdrop {
+		/* background: rgba(33,33,33, 0.35); */
+		background: rgba(204,199,188, 0.45);
+		backdrop-filter: saturate(50%) contrast(50%);
+		opacity: 0;
+		transition:
+			opacity 0.35s ease-in-out,
+			display 0.5s allow-discrete,
+			overlay 0.5s allow-discrete;
+	}
+
+	:popover-open::backdrop {
+		opacity: 1;
+
+		@starting-style {
+			opacity: 0;
 		}
-
-
-
-		/* the modal on small screens */
-		@media (max-width: 700px) {
-			*[popover] {
-				width: calc(100dvw - var(--gutter));
-				/* width: 100dvw; */
-				/* height: 90dvh; */
-				height: calc(100dvh - 4rem);
-				top: 4rem;
-				/* left: unset; */
-				/* bottom: unset; */
-				/* right: auto; */
-				right: calc(var(--gutter) / 2);
-				border-top-left-radius: 1rem !important;
-				border-top-right-radius: 1rem !important;
-				
-				& button[popovertarget] {
-					/* right: calc(var(--gutter) * 1.25); */
-				}
-				
-
-				&::before {
-					content: none;
-					display: none;
-				}
-			}
-			@keyframes popover {
-				from {
-					opacity: 0;
-					transform: translateY(100%);
-				}
-				to {
-					opacity: 1;
-					transform: translateY(0);
-				}
-			}
-		}
+	}
 
 
 
@@ -614,21 +497,34 @@ body:has([popover]:popover-open) {
 .MaxWidthLarge {
 	border-inline: calc((100dvw - var(--width-large) - var(--gutter) - var(--gutter)) / 2) solid transparent;
 }
-
+.MaxWidthExtraLarge {
+	border-inline: calc((100dvw - var(--width-extra-large) - var(--gutter) - var(--gutter)) / 2) solid transparent;
+}
 
 
 
 
 figure.FeatureSet {
 	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: 2rem;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	/* gap: 2rem; */
 	margin: 2rem 0;
+	&:nth-of-type(even) {
+		& img {
+			order: 2;
+		}
+	}
 	& img {
 		width: 100%;
-		border-radius: 5px;
-		aspect-ratio: 1;
+		height: 100%;
+		/* border-radius: 5px; */
+		/* aspect-ratio: 4/3; */
 		background: #eee;
+	}
+	& figcaption {
+		margin: 0;
+		padding: clamp(0em, 2.5vw, 2em) clamp(0em, 5vw, 4em);
 	}
 	& figcaption * {
 		margin: 0;
@@ -667,4 +563,71 @@ button {
 	nav .tertiary {
 		display: none
 	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.GridList {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	& li {
+		padding: 0;
+		margin: 0;
+		text-align: center;
+		& a {
+			text-decoration: none;
+			color: inherit;
+			font-weight: bold;
+			font-size: 1.25rem;
+			& img {
+				box-sizing: border-box;
+				width: 100%;
+				/* border-radius: 5px; */
+				aspect-ratio: 1;
+				/* background: #eee; */
+				border: 10px solid #eee5;
+			}
+		}
+	}
+}
+
+
+
+.Breadcrumbs {
+	
 }

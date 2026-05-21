@@ -8,7 +8,9 @@ import Layout from "$layouts/Layout.astro";
 
 
 export async function getStaticPaths() {
-	const Posts = await Astro.glob('$data/products/*.md')
+	// const Posts = await Astro.glob('$data/products/*.md')
+	const modules = import.meta.glob('/src/data/products/*.md', { eager: true })
+	const Posts = Object.values(modules)
 
 	// const Posts = (await import.meta.glob('$data/products/*.md'))
 	return Posts?.map((post) => ({
@@ -20,18 +22,219 @@ export async function getStaticPaths() {
 }
 
 const { Content, frontmatter: product} = Astro.props.post;
+const html = await Astro.props.post.compiledContent();
+
+function wrapH2WithDetails(html) {
+	const h2Pattern = /<h2[^>]*>[\s\S]*?<\/h2>/gi;
+	const matches = [...html.matchAll(h2Pattern)];
+
+	if (matches.length === 0) return html;
+
+	let result = html.slice(0, matches[0].index);
+
+	for (let i = 0; i < matches.length; i++) {
+		const h2Tag = matches[i][0];
+		const contentStart = matches[i].index + h2Tag.length;
+		const contentEnd = i + 1 < matches.length ? matches[i + 1].index : html.length;
+		const sectionContent = html.slice(contentStart, contentEnd);
+
+		if (i === 0) {
+			result += h2Tag + sectionContent;
+		} else {
+			const inner = h2Tag.replace(/^<h2[^>]*>/i, '').replace(/<\/h2>$/i, '');
+			result += `<details><summary class="h2">${inner}</summary>${sectionContent}</details>`;
+		}
+	}
+
+	return result;
+}
+
+function wrapH2WithDetails(html) {
+	const h2Pattern = /<h2[^>]*>[\s\S]*?<\/h2>/gi;
+	const matches = [...html.matchAll(h2Pattern)];
+
+	if (matches.length === 0) return html;
+
+	let result = html.slice(0, matches[0].index);
+
+	for (let i = 0; i < matches.length; i++) {
+		const h2Tag = matches[i][0];
+		const contentStart = matches[i].index + h2Tag.length;
+		const contentEnd = i + 1 < matches.length ? matches[i + 1].index : html.length;
+		const sectionContent = html.slice(contentStart, contentEnd);
+
+		if (i === 0) {
+			result += h2Tag + sectionContent;
+		} else {
+			const inner = h2Tag.replace(/^<h2[^>]*>/i, '').replace(/<\/h2>$/i, '');
+			const slug = inner.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+			// result += `<details><summary class="h2">${inner}</summary>${sectionContent}</details>`;
+			result += `
+				<button class="pdpMoreInfo h3" popovertarget="${slug}">${inner}</button>
+				<aside popover id="${slug}">
+					<button popovertarget="${slug}" popovertargetaction="hide">close</button>
+					<h2>${inner}</h2>
+					${sectionContent}
+				</aside>`;
+
+		}
+	}
+
+	return result;
+}
+
+const transformedHtml = wrapH2WithDetails(html);
+
+
+// a function to take an object of key value pairs and return a table in html
+function dimensionsTable(obj) {
+	let table = '<table>';
+	table += `<thead><tr><th>Side</th><th>Length</th></tr></thead>`;
+	table += '<tbody>';
+	for (const key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			table += `<tr><th>${key.toUpperCase()}</th><td>${obj[key]}</td></tr>`;
+		}
+	}
+	table += '</tbody>';
+	table += '</table>';
+	return table;
+}
 
 
 ---
 
 <Layout>
-	<p>
-		<a href="/">Home</a> / 
-		<a href={`/${product?.category_slug}`}>{product?.category}</a> / 
+	
+	<p class="MaxWidthExtraLarge Breadcrumbs">
+		<a href="/">Home</a> 
+		<a href={`/${product?.category_slug}`}>{product?.category}</a> 
 		{product?.name}
 	</p>
-	<section class="MaxWidthSmall">
-		<Content />
-		<pre>{JSON.stringify(product, null, 2)}</pre>
+
+	<section class="MaxWidthExtraLarge PDP">
+		<figure>
+			<img src="/test.jpeg" alt="test image" />
+		</figure>
+		<article>
+			<Fragment set:html={transformedHtml} />
+			<!-- <Content /> -->
+		</article>
+		<figure style="display: grid; grid-template-columns: 1fr 1fr; place-items: center; padding: 1em 2em; background: #ccc7bc;">
+			<img src="/dimensions.cast_arches.png" alt="test image" />
+			<figcaption>
+				<h3>Product Dimensions</h3>
+				<Fragment set:html={dimensionsTable(product.dimensions)} />
+			</figcaption>
+			<!-- <pre>{JSON.stringify(product, null, 2)}</pre> -->
+		</figure>
 	</section>
+
 </Layout>
+
+
+<style>
+	.PDP {
+		display: grid;
+		gap: clamp(2em, 3vw, 3em);
+		& figure {
+			margin: 0;
+			padding: 0;
+			/* background-color: antiquewhite; */
+			/* min-height: 300px; */
+			@media (min-width: 800px) {
+				/* position: sticky; */
+				/* top: .75rem; */
+			}
+		}
+		& img {
+			width: 100%;
+			height: auto;
+			/* border-radius: 8px; */
+		}
+		@media (min-width: 800px) {
+			grid-template-columns: 1.35fr minmax(35ch, 1fr);
+			grid-auto-flow: dense;
+			align-items: start;
+			& article {
+				grid-row: span 2;
+			}
+		}
+		
+		h1 {
+			font-size: clamp(2em, 4vw, 4em);
+			margin: .25em 0;
+			line-height: 1;
+		}
+
+		button.pdpMoreInfo {
+			background: none;
+			border: none;
+			padding: 0;
+			/* font-size: 1.25em; */
+			/* font-weight: bold; */
+			cursor: pointer;
+			color: var(--color-primary);
+			display: block;
+			text-transform: none;
+			margin: 1em 0 .5em;
+			&:first-of-type {
+				margin-top: 3em;
+			}
+
+			text-decoration: underline;
+			text-decoration-thickness: 2px;
+			text-decoration-color: transparent;
+			text-underline-offset: .35em;
+			transition: text-decoration-color .25s ease;
+			&::after {
+				content: "   +";
+				/* padding-left: .5em; */
+				color: var(--highlight);
+				white-space: pre;
+				/* font-weight: bold; */
+				/* transform: scale(0.9); */
+				/* font-size: 1em; */
+				/* color: var(--color-primary-light); */
+			}
+			&:hover {
+				text-decoration-color: var(--highlight);
+			}
+
+		}
+
+		details {
+			border-radius: 4px;
+			margin-block: .5rem;
+			background: #3331;
+			padding: .5em 1em;
+			
+			& summary {
+				cursor: pointer;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				&::-webkit-details-marker {
+					display: none;
+				}
+				&::after {
+					content: "+";
+				}
+			}
+			/* Rotate when open */
+			&[open] summary::after {
+				content: "-";
+			}
+		}
+
+
+
+	}
+
+
+
+	
+</style>
